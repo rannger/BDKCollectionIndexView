@@ -86,6 +86,18 @@
     return self;
 }
 
+- (void)setCurrentIndex:(NSUInteger)currentIndex
+{
+    if (currentIndex == _currentIndex) return;
+    UILabel* label = self.indexLabels[_currentIndex];
+    label.font = self.font;
+    label.highlighted = NO;
+    _currentIndex = currentIndex;
+    label = self.indexLabels[_currentIndex];
+    label.font = self.highlightedFont;
+    label.highlighted = YES;
+}
+
 -(void)setupWithIndexTitles:(NSArray *)indexTitles {
     
     _currentIndex = 0;
@@ -190,7 +202,7 @@
     NSInteger currentIndex = self.currentIndex;
     NSInteger newIndex = currentIndex - 1;
     if (newIndex >= 0) {
-        _currentIndex = newIndex;
+        self.currentIndex = newIndex;
         [self sendActionsForControlEvents:UIControlEventValueChanged];
         [self announceNewSection];
     }
@@ -200,7 +212,7 @@
     NSInteger currentIndex = self.currentIndex;
     NSInteger newIndex = currentIndex + 1;
     if (newIndex < self.indexLabels.count) {
-        _currentIndex = newIndex;
+        self.currentIndex = newIndex;
         [self sendActionsForControlEvents:UIControlEventValueChanged];
         [self announceNewSection];
     }
@@ -272,17 +284,20 @@
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
         label.text = indexTitle;
         label.tag = tag;
-        tag = tag + 1;
-        label.font = self.font;
+        label.font = _currentIndex==tag?self.highlightedFont:self.font;
         label.backgroundColor = self.backgroundColor;
         label.textColor = self.tintColor;
+        label.highlightedTextColor = self.highlightedTextColor;
         label.textAlignment = NSTextAlignmentCenter;
         label.isAccessibilityElement = NO;
+        label.highlighted = (_currentIndex==tag);
         [self addSubview:label];
         [workingLabels addObject:label];
+        tag = tag + 1;
     }
     
     self.indexLabels = [NSArray arrayWithArray:workingLabels];
+    
 }
 
 - (void)setNewIndexForPoint:(CGPoint)point {
@@ -326,7 +341,7 @@
     }
     
     if (newIndex != -1 && newIndex != _currentIndex) {
-        _currentIndex = newIndex;
+        self.currentIndex = newIndex;
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 }

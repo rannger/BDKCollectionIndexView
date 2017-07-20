@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, BDKCollectionIndexViewDirection) {
 /**
  Indicates the position of the last-selected index title. Should map directly to a table view / collection section.
  */
-@property (readonly, nonatomic) NSUInteger currentIndex;
+@property (assign, nonatomic) NSUInteger currentIndex;
 
 /**
  The direction in which the control is oriented; this is automatically set based on the frame given.
@@ -43,7 +43,15 @@ typedef NS_ENUM(NSInteger, BDKCollectionIndexViewDirection) {
  Preferred font of the index labels. By default, bold system font of size 12.
  */
 @property (strong, nonatomic) UIFont *font;
+/**
+ Preferred highlighted font of the index labels. By default, system font of size 17.
+ */
+@property (strong, nonatomic) UIFont *highlightedFont;
 
+/**
+Preferred highlighted font of the index labels.By default,it is nil.
+*/
+@property (strong, nonatomic) UIColor *highlightedTextColor;
 /**
  The background color of the "touch status view" that appears when the view is touched.
  */
